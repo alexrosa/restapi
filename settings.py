@@ -2,7 +2,7 @@
 FLASK_SERVER_NAME = 'localhost:5000'
 FLASK_DEBUG = True
 
-# Configurações do Flask-Restplus
+# Configurações do Flask-Restplus e SwaggerUI
 RESTPLUS_SWAGGER_UI_DOC_EXPANSION = 'list'
 RESTPLUS_VALIDATE = False
 RESTPLUS_MASK_SWAGGER = False

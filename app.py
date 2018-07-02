@@ -5,7 +5,7 @@ from endpoints.funcionario import ns as funcionario_namespace
 from endpoints.materia_prima import ns as materia_prima_namespace
 from endpoints.produto import ns as produto_namespace
 from flask import Flask, Blueprint
-from persistence import db
+from persistence import db, create_database
 from endpoints.api_config import api
 
 
@@ -41,7 +41,7 @@ def start_app(flask_app):
     db.init_app(flask_app)
 
     with app.app_context():
-        db.create_all()
+        create_database()
 
 if __name__ == '__main__':
     start_app(app)
