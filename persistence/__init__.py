@@ -6,3 +6,6 @@ def reset_database():
     from persistence.models import Funcionario, MateriaPrima, Produto
     db.drop_all()
     db.create_all()
+
+def create_database():
+    db.create_all()

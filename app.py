@@ -5,8 +5,8 @@ from endpoints.funcionario import ns as funcionario_namespace
 from endpoints.materia_prima import ns as materia_prima_namespace
 from endpoints.produto import ns as produto_namespace
 from flask import Flask, Blueprint
-from persistence import db, reset_database
-from api_config import api
+from persistence import db
+from endpoints.api_config import api
 
 
 app = Flask(__name__)

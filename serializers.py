@@ -1,5 +1,5 @@
 from flask_restplus import fields
-from api_config import api
+from endpoints.api_config import api
 
 '''
 Serializers (JSON) para os objetos do Model 

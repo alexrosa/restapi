@@ -2,7 +2,7 @@ import logging
 
 from flask import request
 from flask_restplus import Resource
-from api_config import api
+from endpoints.api_config import api
 from serializers import funcionario
 from business import FuncionarioRepository
 
