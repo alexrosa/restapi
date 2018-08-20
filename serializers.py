@@ -21,5 +21,6 @@ produto = api.model('Produto', {
     'id': fields.Integer(readOnly=True, description='Chave única do produto'),
     'nome': fields.String(required=True, description='Nome do produto - Máximo de 100 caracteres'),
     'id_funcionario': fields.Integer(attribute='id_funcionario', description='ID do funcionário'),
-    'materias_primas': fields.String(attribute='materia_prima.nome', description='Lista de matérias primas utilizadas no produto')
+    'materias_primas': fields.List(fields.Nested(materia_prima), description='Lista de matérias primas utilizadas no produto')
 })
+

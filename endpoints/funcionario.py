@@ -14,13 +14,12 @@ class FuncionarioServiceList(Resource):
 
     @api.marshal_list_with(funcionario)
     def get(self):
-        '''
-           :return: lista de funcionários
-        '''
+        ''' Retorna uma lista de Funcionários'''
         func = FuncionarioRepository()
         return func.lista_funcionarios()
 
     @api.response(201, 'Funcionário criado com sucesso')
+    @api.marshal_with(funcionario)
     @api.expect(funcionario)
     def post(self):
         '''
@@ -28,8 +27,8 @@ class FuncionarioServiceList(Resource):
         '''
         dados = request.json
         func = FuncionarioRepository()
-        func.novo_funcionario(dados)
-        return None, 201
+        funcionario = func.novo_funcionario(dados)
+        return funcionario, 201
 
 @ns.route('/<int:id>')
 @api.response(404, 'Funcionário não encontrado!')
@@ -37,22 +36,20 @@ class FuncionarioService(Resource):
 
     @api.marshal_with(funcionario)
     def get(self, id):
-        '''
-        :param id_funcionario:
-        :return: Funcionario
-        '''
+        ''' Retorna um Funcionário '''
         func = FuncionarioRepository()
         return func.get_funcionario_by_id(id)
 
     @api.expect(funcionario)
+    @api.marshal_with(funcionario)
     @api.response(204, 'Funcionário atualizado com sucesso!')
     def put(self, id):
         ''' Atualiza os dados do funcionario. Utilize este método para atualizar os dados do funcionário '''
 
         dados_funcionario = request.json
         func = FuncionarioRepository()
-        func.atualiza_funcionario(id, dados_funcionario)
-        return None, 204
+        funcionario = func.atualiza_funcionario(id, dados_funcionario)
+        return funcionario, 204
 
     @api.response(204, 'Funcionário excluído com sucesso!')
     def delete(self, id):

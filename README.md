@@ -1,5 +1,4 @@
-# Agriness - Desafio 1
-Obrigado pela oportunidade
+#Simple API (Python, Flask, Restplus)
 
 # Sobre a solução:
 A solução foi desenvolvida utlizando Python 3, Flask, Flask RESTPlus e SQLAlchemy. 
@@ -41,14 +40,4 @@ Open your command line
 $ cd ../agriness
 
 $ python app.py
-
-# TODO LIST:
-
-1 - Desenvolver os seguintes relatórios:
-
-    * Lista de produtos finais;
-
-2 - Desenvolver a interface gráfica (front-end);
-
-    * Desenvolver interface gráfica para o usuário utilizando ReactJS
 
