@@ -41,13 +41,3 @@ $ cd ../agriness
 
 $ python app.py
 
-# TODO LIST:
-
-1 - Desenvolver os seguintes relatórios:
-
-    * Lista de produtos finais;
-
-2 - Desenvolver a interface gráfica (front-end);
-
-    * Desenvolver interface gráfica para o usuário utilizando ReactJS
-
