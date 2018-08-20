@@ -1,5 +1,4 @@
-# Agriness - Desafio 1
-Obrigado pela oportunidade
+#Simple API (Python, Flask, Restplus)
 
 # Sobre a solução:
 A solução foi desenvolvida utlizando Python 3, Flask, Flask RESTPlus e SQLAlchemy. 

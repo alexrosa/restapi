@@ -14,32 +14,26 @@ class MateriaPrimaServiceList(Resource):
 
     @api.marshal_list_with(materia_prima)
     def get(self):
-        '''
-           :return: lista de Matérias Primas
-        '''
+        ''' Retorna uma lista de Matérias Primas '''
         _materia = MateriaPrimaRepository()
         return _materia.lista_materia_primas()
 
     @api.response(201, 'Matéria prima criada com sucesso!')
+    @api.marshal_with(materia_prima)
     @api.expect(materia_prima)
     def post(self):
-        '''
-            Cria nova matéria prima
-        '''
+        ''' Cria uma nova Matéria Prima '''
         dados = request.json
         _materia = MateriaPrimaRepository()
-        _materia.nova_materia_prima(dados)
-        return None, 201
+        _mp = _materia.nova_materia_prima(dados)
+        return _mp, 201
 
 @ns.route('/relatorio/<int:quantidade>')
 @api.response(404, 'Matérias primas não encontradas para está quantidade!')
 class MateriaPrimaReport(Resource):
     @api.marshal_with(materia_prima)
     def get(self, quantidade):
-        '''
-        :param quantidade:
-        :return: List of MateriaPrima
-        '''
+        ''' Retorna uma lista de Matérias Primas pela quantidade em estoque'''
         _materia = MateriaPrimaRepository()
         return _materia.get_lista_materias_por_quantidade(quantidade)
 
@@ -50,10 +44,7 @@ class MateriaPrimaService(Resource):
 
     @api.marshal_with(materia_prima)
     def get(self, id):
-        '''
-        :param id_materia_prima:
-        :return: MateriaPrima
-        '''
+        ''' Retorna uma Matéria Prima'''
         _materia = MateriaPrimaRepository()
         return _materia.get_materia_prima_by_id(id)
 

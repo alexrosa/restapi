@@ -1,3 +1,4 @@
+from flask import json
 from persistence import db
 from persistence.models import Funcionario, MateriaPrima, Produto
 import logging
@@ -15,6 +16,7 @@ class FuncionarioRepository:
         funcionario = Funcionario(nome, jornada_trabalho)
         db.session.add(funcionario)
         db.session.commit()
+        return funcionario
 
     def lista_funcionarios(self):
         return Funcionario.query.all()
@@ -25,6 +27,7 @@ class FuncionarioRepository:
         funcionario.jornada_trabalho = dados.get('jornada_trabalho')
         db.session.add(funcionario)
         db.session.commit()
+        return funcionario
 
     def deleta_funcionario(self, id_funcionario):
         funcionario = self.get_funcionario_by_id(id_funcionario)
@@ -33,6 +36,9 @@ class FuncionarioRepository:
 
     def get_funcionario_by_id(self, id_funcionario):
         return Funcionario.query.filter(Funcionario.id == id_funcionario).one()
+
+    def get_funcionario_by_nome(self, nome):
+        return Funcionario.query.filter(Funcionario.nome == nome).one()
 
 
 class MateriaPrimaRepository:
@@ -43,6 +49,7 @@ class MateriaPrimaRepository:
         _materia_prima = MateriaPrima(nome, quantidade)
         db.session.add(_materia_prima)
         db.session.commit()
+        return _materia_prima
 
     def lista_materia_primas(self):
         return MateriaPrima.query.all()
@@ -60,41 +67,48 @@ class MateriaPrimaRepository:
         db.session.commit()
 
     def get_materia_prima_by_id(self, id_materia_prima):
-        log.info("id_materia_prima ===> "+str(id_materia_prima))
         return db.session.query(MateriaPrima).filter(MateriaPrima.id == id_materia_prima).one()
 
     def get_lista_materias_por_quantidade(self, quantidade):
         return db.session.query(MateriaPrima).filter(MateriaPrima.quantidade < quantidade).all()
 
+    def get_materia_prima_by_nome(self, nome):
+        return db.session.query(MateriaPrima).filter(MateriaPrima.nome == nome).one()
 
 class ProdutoRepository:
 
     def novo_produto(self, dados):
-        nome = dados.get('nome')
-        id_funcionario = dados.get('id_funcionario')
-        materias_primas = dados.get('materias_primas')
+        return self._create_or_update(dados)
 
-        produto = Produto(nome, id_funcionario, materias_primas)
-
-        db.session.add(produto)
-        db.session.commit()
 
     def lista_produtos(self):
         return Produto.query.all()
 
     def atualiza_produto(self, id_produto, dados):
+        return self._create_or_update(dados, id_produto)
+
+
+    def _create_or_update(self, dados, id_produto=None):
         nome = dados.get('nome')
         id_funcionario = dados.get('id_funcionario')
-        materias_primas = dados.get('materias_primas')
+        mat_primas = dados.get('materias_primas')
+        materia_prima_list = []
 
-        produto = self.get_produto_by_id(id_produto)
-        produto.id_funcionario = id_funcionario
-        produto.nome = nome
-        produto.materias_primas = materias_primas
+        for dic in mat_primas:
+            _materia = MateriaPrimaRepository().get_materia_prima_by_id(dic['id'])
+            materia_prima_list.append(_materia)
 
-        db.session.add(produto)
+        if id_produto is not None:
+            _produto = self.get_produto_by_id(id_produto)
+            _produto.id_funcionario = id_funcionario
+            _produto.nome = nome
+            _produto.materias_primas.append(materia_prima_list)
+        else:
+            _produto = Produto(nome, id_funcionario, materia_prima_list)
+
+        db.session.add(_produto)
         db.session.commit()
-        return produto
+        return _produto.id
 
     def deleta_produto(self, id_produto):
         produto = self.get_produto_by_id(id_produto)
@@ -102,7 +116,16 @@ class ProdutoRepository:
         db.session.commit()
 
     def get_produto_by_id(self, id_produto):
-        return Produto.query.filter(Produto.id == id_produto)
+        return db.session.query(Produto).filter(Produto.id == id_produto).one()
+
+    def list_produtos_by_nome_funcionario(self, nome_funcionario):
+        _funcionario = FuncionarioRepository().get_funcionario_by_nome(nome_funcionario)
+        return db.session.query(Produto).filter(Produto.id_funcionario == _funcionario.id).all()
+
+    def list_produtos_by_materia_prima(self, nome_materia_prima):
+        _mat_prima = MateriaPrimaRepository().get_materia_prima_by_nome(nome_materia_prima)
+        return db.session.query(Produto).join(MateriaPrima).filter(MateriaPrima.id == _mat_prima.id).all()
+
 
 
 

@@ -7,6 +7,7 @@ from endpoints.produto import ns as produto_namespace
 from flask import Flask, Blueprint
 from persistence import db, create_database
 from endpoints.api_config import api
+from flask_cors import CORS
 
 
 app = Flask(__name__)
@@ -14,6 +15,7 @@ app = Flask(__name__)
 logging_conf_path = os.path.normcase(os.path.join(os.path.dirname(__file__), 'logging.conf'))
 logging.config.fileConfig(logging_conf_path)
 log = logging.getLogger(__name__)
+cors = CORS(app, resources={r"/*": {"origins": "*"}})
 
 def config_app(flask_app):
     '''Configurando a aplicação'''
